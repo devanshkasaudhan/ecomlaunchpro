@@ -11,26 +11,26 @@
     rel="stylesheet">
 
   <title>Ecom launch Pro - Your shopify partner</title>
-  <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
-
-
-
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">  
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-
+  
+  
   <!-- Additional CSS Files -->
   <link rel="stylesheet" href="assets/css/fontawesome.css">
   <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
   <link rel="stylesheet" href="assets/css/owl.css">
   <link rel="stylesheet" href="assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+   <!-- ✅ Load Firebase SDKs FIRST -->
+<script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore-compat.js"></script>
   <!--
-
-TemplateMo 574 Mexant
-
-https://templatemo.com/tm-574-mexant
-
+    
+  TemplateMo 574 Mexant
+  
+  https://templatemo.com/tm-574-mexant
+  
 -->
 </head>
 
@@ -612,6 +612,59 @@ https://templatemo.com/tm-574-mexant
 
     var swiper = new Swiper(".swiper-container", swiperOptions);
   </script>
+ 
+
+<!-- ✅ THEN add your Firebase initialization and form logic -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // ✅ Initialize Firebase after it's loaded
+    const firebaseConfig = {
+      apiKey: "AIzaSyACWjZiGG8xel-imUi-gCpKQkbz8OfD5Ek",
+      authDomain: "ecom-launch-pro.firebaseapp.com",
+      projectId: "ecom-launch-pro",
+      storageBucket: "ecom-launch-pro.appspot.com",
+      messagingSenderId: "59939302863",
+      appId: "1:59939302863:web:daf29edb9d76db794136ba",
+      measurementId: "G-4WSNK8Z6JJ"
+    };
+
+    // ✅ Ensure `firebase` is defined before this line
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ✅ Attach form event handler after Firebase is ready
+    const form = document.getElementById('calculate');
+    if (form) {
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const category = document.getElementById('chooseOption').value;
+
+        try {
+          await db.collection('calculateFormSubmissions').add({
+            name,
+            email,
+            subject,
+            category,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          alert("Form submitted successfully!");
+          form.reset();
+        } catch (error) {
+          console.error("Error writing to Firestore:", error);
+          alert("Something went wrong.");
+        }
+      });
+    }
+  });
+</script>
+
+
+
 </body>
 
 </html>

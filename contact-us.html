@@ -22,6 +22,9 @@
   <link rel="stylesheet" href="assets/css/owl.css">
   <link rel="stylesheet" href="assets/css/animate.css">
   <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+   <!-- ✅ Load Firebase SDKs FIRST -->
+<script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -281,6 +284,52 @@
 
     var swiper = new Swiper(".swiper-container", swiperOptions);
   </script>
+
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyACWjZiGG8xel-imUi-gCpKQkbz8OfD5Ek",
+    authDomain: "ecom-launch-pro.firebaseapp.com",
+    projectId: "ecom-launch-pro",
+    storageBucket: "ecom-launch-pro.appspot.com",
+    messagingSenderId: "59939302863",
+    appId: "1:59939302863:web:daf29edb9d76db794136ba",
+    measurementId: "G-4WSNK8Z6JJ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(); // ✅ define db here
+</script>
+
+<script>
+  document.getElementById('contact').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
+
+    try {
+      await db.collection('contactFormSubmissions').add({
+        name,
+        phone,
+        email,
+        subject,
+        message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      alert("Message sent!");
+      this.reset();
+    } catch (error) {
+      console.error(error);
+      alert("Error submitting form.");
+    }
+  });
+</script>
+
 
 </body>
 
